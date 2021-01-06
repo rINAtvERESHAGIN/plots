@@ -24,17 +24,19 @@ const Laba2 = props => {
   }, []);
 
 
-  const createChartData = (C, /*XL, dx*/) => {
-    // console.log(C.map((col) => col[0]));
-    // const createChartData = (C) => {
-    const XL = 0.2;
-    const dx = 0.01;
+  const createChartData = (C, XL, dx) => {
+    // const XL = 0.2;
+    // const dx = 0.01;
 
     const lineX = [];
+
+
     for (let xVal = 0; xVal < XL + dx; xVal += dx) {
       lineX.push(xVal.toFixed(2));
     }
+
     const chartData = [];
+
     for (let i = 0; i < C[0].length; i++) {
       const lineY = C.map((col) => col[i]);
       chartData.push({x: lineX, y: lineY, type: "scatter"});
@@ -48,6 +50,7 @@ const Laba2 = props => {
     const D = 5e-6;
     const Re = 3;
     const d = 1e-2;
+
     const TL = 10e4;
     const Pr = 400;
     const cs = 10;
@@ -58,17 +61,23 @@ const Laba2 = props => {
     const TN = parseInt((TL - 0) / dt + 1, 10);
 
     let C = Array.from(new Array(XN), _ => Array(TN).fill(0));
+
     for (let j = 0; j < XL + dx; j += dx) {
       const fixedJ = j.toFixed(2);
-      const index = parseInt(fixedJ * 100, 10);
-      const result = 200 + 50 * fixedJ * dx;
-      C[index][0] = result
+      let index = parseInt(fixedJ * 100, 10);
+      if (j === 0.2900000000000001) {
+        index = 29;
+      }
+      const result = 200 + (50 * j.toFixed(2) * dx);
+
+      C[index][0] = result;
     }
 
-    let a = -(D * dt) / Math.pow(dx, 2)
-    let b = 1 + 2 * ((D * dt) / Math.pow(dx, 2))
-    let c = a
-    let nu = D * (1 + 0.5 * (0.55 * Math.pow(Re, 0.5) * Math.pow(Pr, (1 / 3)))) / d
+
+    let a = -(D * dt) / Math.pow(dx, 2);
+    let b = 1 + 2 * ((D * dt) / Math.pow(dx, 2));
+    let c = a;
+    let nu = D * (1 + 0.5 * (0.55 * Math.pow(Re, 0.5) * Math.pow(Pr, (1 / 3)))) / d;
 
     for (let n = 0; n < TN - 1; n++) {
       let alfa = [0];
